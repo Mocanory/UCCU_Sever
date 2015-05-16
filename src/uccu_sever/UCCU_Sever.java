@@ -9,21 +9,28 @@ package uccu_sever;
  *
  * @author Xiaoshuang
  */
+
+import java.net.InetAddress;
+
 public class UCCU_Sever {
 
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String[] args) {
         // TODO code application logic here
-        AioModule aio = new AioModule(new SampleRegister(), new SampleDecoder());
-        aio.init("162.105.37.89", 8998, 4);
-        aio.asyncAccept();
+        
+        
+        GameServer gs = new GameServer(true, true, 100);
+        AioModule aio = new AioModule(gs, gs, gs);
         try {
-            Thread.sleep(1000000);
+            aio.init(InetAddress.getLocalHost().getHostAddress(), 8998, 8);
         }
         catch (Exception e) {
         }
+        gs.init(aio, Const.DBAddress, Const.DBPort);
+        aio.asyncAccept();
     }
     
 }
